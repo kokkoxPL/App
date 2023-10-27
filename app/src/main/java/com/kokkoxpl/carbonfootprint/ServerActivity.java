@@ -1,16 +1,7 @@
 package com.kokkoxpl.carbonfootprint;
 
-import static android.app.PendingIntent.getActivity;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Build;
@@ -19,17 +10,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
-import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class ServerActivity extends AppCompatActivity {
     private static final String TAG = "BT";
     SwitchCompat mSwitch;
     Button mButton1;
@@ -61,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_server);
 
-        requestBlePermissions(MainActivity.this, 1);
+        requestBlePermissions(ServerActivity.this, 1);
 
         mSwitch = findViewById(R.id.switch1);
-        mButton1 = findViewById(R.id.b1);
+        mButton1 = findViewById(R.id.find_devices);
         mButton2 = findViewById(R.id.b2);
         mButton3 = findViewById(R.id.b3);
         mTextView1 = findViewById(R.id.editText);
@@ -75,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         mSwitch.setOnClickListener(view -> {
-            mSwitch.setText(mSwitch.isChecked() ? "Server" : "Client");
+            Intent switchActivityIntent = new Intent(this, ServerActivity.class);
+            startActivity(switchActivityIntent);
         });
 
         mButton1.setOnClickListener(view -> {
@@ -116,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            FragmentActivity activity = MainActivity.this;
+            FragmentActivity activity = ServerActivity.this;
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
